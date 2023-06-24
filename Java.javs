@@ -1,0 +1,97 @@
+
+java
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int[][] board = new int[10][10];
+        int[] shipSize = {2, 3, 3, 4, 5};
+        int count = 0;
+
+        // Place ships on the board
+        for (int size : shipSize) {
+            count++;
+            System.out.println("Place your " + count + " ship with size " + size + ":");
+            int x = sc.nextInt();
+            int y = sc.nextInt();
+            System.out.print("Direction (0 for horizontal, 1 for vertical): ");
+            int dir = sc.nextInt();
+            for (int i = 0; i < size; i++) {
+                if (dir == 0) {
+                    board[x][y + i] = count;
+                } else {
+                    board[x + i][y] = count;
+                }
+            }
+        }
+
+        // Game loop
+        while (true) {
+            // Print board
+            System.out.println("  0 1 2 3 4 5 6 7 8 9");
+            for (int i = 0; i < 10; i++) {
+                System.out.print(i + " ");
+                for (int j = 0; j < 10; j++) {
+                    if (board[i][j] == 0) {
+                        System.out.print("- ");
+                    } else if (board[i][j] == -1) {
+                        System.out.print("X ");
+                    } else {
+                        System.out.print("# ");
+                    }
+                }
+                System.out.println();
+            }
+
+            // Player's turn
+            System.out.print("Enter coordinates for your attack: ");
+            int x = sc.nextInt();
+            int y = sc.nextInt();
+            if (board[x][y] > 0) {
+                board[x][y] = -1;
+                System.out.println("Hit!");
+            } else {
+                System.out.println("Miss!");
+            }
+
+            // Check end game condition
+            boolean end = true;
+            for (int i = 0; i < 10; i++) {
+                for (int j = 0; j < 10; j++) {
+                    if (board[i][j] > 0) {
+                        end = false;
+                    }
+                }
+            }
+            if (end) {
+                System.out.println("You win!");
+                break;
+            }
+
+            // Computer's turn
+            int cx = (int) (Math.random() * 10);
+            int cy = (int) (Math.random() * 10);
+            if (board[cx][cy] > 0) {
+                board[cx][cy] = -1;
+                System.out.println("Computer hits " + cx + " " + cy + ".");
+            } else {
+                System.out.println("Computer misses " + cx + " " + cy + ".");
+            }
+
+            // Check end game condition
+            end = true;
+            for (int i = 0; i < 10; i++) {
+                for (int j = 0; j < 10; j++) {
+                    if (board[i][j] > 0) {
+                        end = false;
+                    }
+                }
+            }
+            if (end) {
+                System.out.println("Computer wins!");
+                break;
+            }
+        }
+    }
+}
